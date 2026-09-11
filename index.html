@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>欣昀手機橋｜予安任務入口</title>
+<style>
+body{font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif;max-width:680px;margin:0 auto;padding:28px 20px;line-height:1.65;background:#f7f7f8;color:#171717}
+.card{background:#fff;border-radius:18px;padding:24px;box-shadow:0 2px 14px rgba(0,0,0,.08)}
+h1{font-size:24px;margin:0 0 12px}
+p{margin:10px 0}
+button{width:100%;font-size:20px;padding:16px 18px;border:0;border-radius:14px;background:#111;color:#fff;margin-top:16px}
+.small{font-size:14px;color:#666}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>欣昀手機橋｜予安任務入口</h1>
+<p id="task">正在準備任務…</p>
+<button id="open">開啟手機橋</button>
+<p class="small">只有你按下按鈕後，才會把這次唯讀任務交給手機橋；手機橋仍會再要求你確認一次。</p>
+</div>
+<script>
+(function(){
+  const q=new URLSearchParams(location.search);
+  const scope=['today','all'].includes(q.get('scope'))?q.get('scope'):'today';
+  const state=['unread','read','all'].includes(q.get('state'))?q.get('state'):'unread';
+  const keyword=(q.get('keyword')||'').slice(0,80);
+  const scopeText=scope==='today'?'今天':'全部';
+  const stateText=state==='unread'?'未讀':state==='read'?'已讀':'全部';
+  document.getElementById('task').textContent=`任務：${scopeText}＋${stateText}${keyword?`＋關鍵字「${keyword}」`:''}`;
+  const deep=`xinyunbridge://sms-task?scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state)}${keyword?`&keyword=${encodeURIComponent(keyword)}`:''}`;
+  document.getElementById('open').addEventListener('click',()=>{location.href=deep;});
+})();
+</script>
+</body>
+</html>
